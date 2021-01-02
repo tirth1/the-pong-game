@@ -2,6 +2,9 @@ from turtle import Turtle, Screen
 import time
 from paddle import Paddle
 from ball import Ball
+from scoreboard import Scoreboard
+from screen_divider import ScreenDivider
+
 screen = Screen()
 screen.screensize(600, 600)
 screen.bgcolor("black")
@@ -9,16 +12,14 @@ screen.title("The Pong Game")
 screen.tracer(0)
 screen.listen()
 
-for y in range(300, -340, -40):
-    d = Turtle(shape="square")
-    d.penup()
-    d.goto(0, y)
-    d.color("white")
-    d.turtlesize(stretch_wid=1, stretch_len=0.1)
+screen_divider = ScreenDivider()
 
 paddle1 = Paddle("left")
 paddle2 = Paddle("right")
 ball = Ball()
+scoreboard1 = Scoreboard("left")
+scoreboard2 = Scoreboard("right")
+
 screen.update()
 
 screen.onkeypress(fun=paddle1.move_up, key="Up")
@@ -29,6 +30,8 @@ screen.onkeypress(fun=paddle2.move_down, key="s")
 game_on = True
 while game_on:
     screen.update()
+    scoreboard1.score(paddle1.score)
+    scoreboard2.score(paddle2.score)
     time.sleep(0.1)
     ball.move()
 
@@ -50,13 +53,10 @@ while game_on:
     if ball.xcor() > 390:
         paddle1.goal()
         ball.bounce_hor()
-        print(f"paddle1 score: {paddle1.score}")
 
     # Detect collision with left side wall
     if ball.xcor() < -390:
         paddle2.goal()
         ball.bounce_hor()
-        print(f"paddle2 score: {paddle2.score}")
-
 
 screen.exitonclick()
